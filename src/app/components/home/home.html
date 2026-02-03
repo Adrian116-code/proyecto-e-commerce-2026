@@ -1,0 +1,63 @@
+<div class="welcome-container">
+  <h1>Bienvenido a la Aplicación</h1>
+  <p>Por favor, inicia sesión o crea una cuenta para continuar.</p>
+
+
+  <nav>
+    <div class="actions">
+      <button routerLink="/admin">Admin</button>
+      <button routerLink="/login">Ir al Login</button>
+      <button routerLink="/register">Crear Cuenta</button>
+      <button routerLink="/carrito-de-compras">Carrito de Compras</button>
+    </div>
+  </nav>
+
+  <div class="home-container">
+
+    <p>Bienvenido: <strong>{{ userEmail }}</strong></p>
+    <button class="btn btn-primary" (click)="signOut()">Cerrar Sesión</button>
+  </div>
+</div>
+<div class="main-layout">
+  <div class="content-area">
+    <div class="productos-grid">
+      <div *ngFor="let p of productos" class="producto-card">
+
+        <img [src]="p.imagen_url || 'assets/default.png'" class="img-producto">
+
+        <div class="info">
+          <span class="badge">{{ p.categoria}}</span>
+
+          <h3>{{ p.nombre }}</h3>
+
+          <p class="precio">${{ p.precio }}</p>
+
+          <button class="btn btn-primary" style="margin-bottom: 20px;" (click)="verDetalle(p)">Ver Detalle</button> -
+          <button class="btn btn-success" style="margin-bottom: 20px;" (click)="agregarAlCarrito(p)">
+            🛒 Agregar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="userEmail" class="cart-sidebar">
+    <aside>
+      <h3>🛒 Mi Carrito</h3>
+      <div *ngIf="carritoItems.length === 0" class="empty-cart">
+        El carrito está vacío
+      </div>
+      <div class="cart-item" *ngFor="let item of carritoItems">
+        <div class="item-info">
+          <span class="item-name">ID: {{ item.productos?.nombre }}</span>
+          <span class="item-qty">Cant: {{ item.cantidad }}</span>
+        </div>
+        <span class="item-price">${{ item.productos?.precio * item.cantidad }}</span>
+        <button class="btn btn-danger" (click)="eliminarDelCarrito(item.id)">Eliminar</button>
+      </div>
+      <div class="cart-total" *ngIf="carritoItems.length > 0">
+        <hr>
+        <button class="btn-checkout" routerLink="/metodo-de-pago">Finalizar Compra</button>
+      </div>
+    </aside>
+  </div>
+</div>

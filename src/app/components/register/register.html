@@ -1,0 +1,19 @@
+<div class="auth-card">
+    <h2 style="text-align: center;">Crear Cuenta</h2>
+
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="email" [(ngModel)]="email" placeholder="tu@email.com">
+    </div>
+
+    <div class="form-group">
+        <label>Contraseña:</label>
+        <input type="password" [(ngModel)]="password" placeholder="Crea una contraseña">
+    </div>
+
+    <button (click)="signUp()">Registrarse</button>
+    <div style="padding-top: 20px;">
+        <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+    </div>
+
+</div>

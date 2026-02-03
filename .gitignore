@@ -40,3 +40,16 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Credenciales y llaves
+src/environments/*.ts
+src/environments/environment.prod.ts
+
+# Excepto el archivo de ejemplo (si decides crearlo luego)
+!src/environments/*.template.ts
+
+# Archivos de sistema y logs
+.DS_Store
+thumbs.db
+npm-debug.log*
+yarn-error.log*

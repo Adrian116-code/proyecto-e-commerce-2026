@@ -22,13 +22,19 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.2.14",
     "@angular/common": "^20.2.0",
     "@angular/compiler": "^20.2.0",
     "@angular/core": "^20.2.0",
     "@angular/forms": "^20.2.0",
+    "@angular/material": "^20.2.14",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "@mercadopago/sdk-js": "^0.0.3",
+    "@supabase/supabase-js": "^2.93.2",
+    "aos": "^2.3.4",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.26.18",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
@@ -36,6 +42,7 @@
     "@angular/build": "^20.2.2",
     "@angular/cli": "^20.2.2",
     "@angular/compiler-cli": "^20.2.0",
+    "@types/aos": "^3.0.7",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
@@ -43,6 +50,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "supabase": "^2.72.9",
     "typescript": "~5.9.2"
   }
 }

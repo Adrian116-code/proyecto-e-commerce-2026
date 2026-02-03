@@ -1,0 +1,51 @@
+<nav>
+    <div class="actions" style="text-align: center;">
+        <button routerLink="/admin">Admin</button>
+        <button routerLink="/login">Ir al Login</button>
+        <button routerLink="/register">Crear Cuenta</button>
+        <button routerLink="/home">Home</button>
+    </div>
+</nav>
+<div class="main-layout" *ngIf="userEmail">
+
+
+    <aside class="cart-sidebar">
+        <h3>🛒 Mi Carrito</h3>
+        <div *ngIf="carritoItems.length === 0" class="empty-cart">
+            El carrito está vacío
+        </div>
+        <div class="cart-item" *ngFor="let item of carritoItems">
+            <div class="item-info">
+                <span class="item-name">ID: {{ item.productos?.nombre }}</span>
+                <span class="item-qty">Cant: {{ item.cantidad }}</span>
+            </div>
+            <span class="item-price">${{ item.productos?.precio * item.cantidad }}</span>
+            <button class="btn btn-danger" (click)="eliminarDelCarrito(item.id)">Eliminar</button>
+        </div>
+
+        <div class="cart-total" *ngIf="carritoItems.length > 0">
+            <hr>
+            <button class="btn-checkout" routerLink="/metodo-de-pago">Finalizar Compra</button>
+
+        </div>
+
+    </aside>
+
+    <div class="content-area">
+        <nav class="main-nav">
+            <p>Usuario: <strong>{{ userEmail }}</strong></p>
+            <button class="btn btn-dark" (click)="signOut()">Salir</button>
+        </nav>
+        <div class="productos-grid">
+            <div *ngFor="let p of productos" class="producto-card">
+                <img [src]="p.imagen_url || 'assets/default.png'" class="img-producto">
+                <div class="info">
+                    <span class="badge">{{ p.categoria }}</span>
+                    <h3>{{ p.nombre }}</h3>
+                    <p class="precio">${{ p.precio }}</p>
+                    <button class="btn btn-dark" (click)="agregarAlCarrito(p)">🛒 Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
