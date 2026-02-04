@@ -1,9 +1,4 @@
 const { writeFile } = require('fs');
-const path = require('path');
-
-// Esta ruta debe coincidir con la que busca tu Angular (vimos que era src/environments/environment.ts)
-const targetPath = './src/environments/environment.ts';
-
 const envConfigFile = `
 export const environment = {
   production: true,
@@ -11,11 +6,6 @@ export const environment = {
   supabaseKey: '${process.env['https://ghgpkpsbfimmpuxvkfqt.supabase.co']}'
 };
 `;
-
-writeFile(targetPath, envConfigFile, function (err: any) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(`Archivo de entorno generado en ${targetPath}`);
-  }
+writeFile('./src/environments/environment.ts', envConfigFile, (err: any) => {
+  if (err) console.log(err);
 });
