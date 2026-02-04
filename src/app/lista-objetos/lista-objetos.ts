@@ -51,6 +51,7 @@ export class ListaObjetos {
       .select(`
       id,
       cantidad,
+      imagen_id,
       productos (nombre, precio)
     `)
       .eq('user_id', user.id);
@@ -101,6 +102,7 @@ export class ListaObjetos {
         {
           user_id: user.id,
           producto_id: producto.id,
+          imagen_id: producto.imagen_url,
           cantidad: 1
         }
 

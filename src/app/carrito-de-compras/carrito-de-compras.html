@@ -5,6 +5,9 @@
         <button routerLink="/register">Crear Cuenta</button>
         <button routerLink="/home">Home</button>
     </div>
+    <div class="actions" style="justify-content: right inherit;">
+        <button (click)="signOut()">Cerrar Sesión</button>
+    </div>
 </nav>
 <div class="main-layout" *ngIf="userEmail">
 
@@ -15,37 +18,21 @@
             El carrito está vacío
         </div>
         <div class="cart-item" *ngFor="let item of carritoItems">
+            <img style="width: 5%;" [src]="item.imagen_id || 'assets/default.png'">
             <div class="item-info">
-                <span class="item-name">ID: {{ item.productos?.nombre }}</span>
+                <span class="item-name">{{ item.productos?.nombre }}</span>
                 <span class="item-qty">Cant: {{ item.cantidad }}</span>
             </div>
             <span class="item-price">${{ item.productos?.precio * item.cantidad }}</span>
             <button class="btn btn-danger" (click)="eliminarDelCarrito(item.id)">Eliminar</button>
         </div>
-
-        <div class="cart-total" *ngIf="carritoItems.length > 0">
-            <hr>
-            <button class="btn-checkout" routerLink="/metodo-de-pago">Finalizar Compra</button>
-
-        </div>
-
     </aside>
-
     <div class="content-area">
-        <nav class="main-nav">
+        <nav class="main-nav" style="flex-direction: column;">
             <p>Usuario: <strong>{{ userEmail }}</strong></p>
-            <button class="btn btn-dark" (click)="signOut()">Salir</button>
+                <p>Nombre:<strong>{{ userEmail }}</strong></p> <br>
+                <p>Rol:<strong>{{ role }}</strong></p>
+            <button class="btn-checkout" routerLink="/metodo-de-pago">Finalizar Compra</button>
         </nav>
-        <div class="productos-grid">
-            <div *ngFor="let p of productos" class="producto-card">
-                <img [src]="p.imagen_url || 'assets/default.png'" class="img-producto">
-                <div class="info">
-                    <span class="badge">{{ p.categoria }}</span>
-                    <h3>{{ p.nombre }}</h3>
-                    <p class="precio">${{ p.precio }}</p>
-                    <button class="btn btn-dark" (click)="agregarAlCarrito(p)">🛒 Agregar</button>
-                </div>
-            </div>
-        </div>
     </div>
 </div>

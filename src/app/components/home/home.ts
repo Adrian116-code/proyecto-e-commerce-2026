@@ -49,6 +49,7 @@ export class Home {
       .select(`
       id,
       cantidad,
+      imagen_id,
       productos (nombre, precio)
     `)
       .eq('user_id', user.id);
@@ -99,6 +100,7 @@ export class Home {
         {
           user_id: user.id,
           producto_id: producto.id,
+          imagen_id: producto.imagen_url,
           cantidad: 1
         }
 

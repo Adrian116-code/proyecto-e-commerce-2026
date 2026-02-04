@@ -40,7 +40,7 @@
             </div>
             <div class="cart-item" *ngFor="let item of carritoItems">
                 <div class="item-info">
-                    <span class="item-name">ID: {{ item.productos?.nombre }}</span>
+                    <span class="item-name">{{ item.productos?.nombre }}</span>
                     <span class="item-qty">Cant: {{ item.cantidad }}</span>
                 </div>
                 <span class="item-price">${{ item.productos?.precio * item.cantidad}}</span>
