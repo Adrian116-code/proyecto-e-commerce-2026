@@ -1,17 +1,10 @@
-const { writeFile } = require('fs');
-
+const fs = require('fs');
+const targetPath = './src/environments/environment.ts';
 const envConfigFile = `
 export const environment = {
   production: true,
-  supabaseUrl: '${process.env['https://ghgpkpsbfimmpuxvkfqt.supabase.co']}',
-  supabaseKey: '${process.env['sb_publishable_A2A1vOreY9nfUTbxK479bw_7wGCzIan']}'
+  supabaseUrl: '${process.env.SUPABASE_URL}',
+  supabaseKey: '${process.env.SUPABASE_KEY}'
 };
 `;
-
-writeFile('./src/environments/environment.ts', envConfigFile, (err) => {
-  if (err) {
-    console.log('Error:', err);
-  } else {
-    console.log('Archivo generado correctamente');
-  }
-});
+fs.writeFileSync(targetPath, envConfigFile);
