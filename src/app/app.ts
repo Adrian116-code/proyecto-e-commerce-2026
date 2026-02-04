@@ -1,7 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import * as AOS from 'aos';
-import Swal from 'sweetalert2';
 import { Router, NavigationEnd } from '@angular/router';
 
 @Component({

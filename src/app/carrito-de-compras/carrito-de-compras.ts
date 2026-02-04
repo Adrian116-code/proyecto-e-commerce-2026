@@ -13,7 +13,6 @@ import Swal from 'sweetalert2';
 })
 export class CarritoDeCompras {
   userEmail: string | undefined = '';
-  role: string | undefined = '';
   productos: any[] = [];
   carritoItems: any[] = [];
 
@@ -27,7 +26,6 @@ export class CarritoDeCompras {
       this.router.navigate(['/login']);
     } else {
       this.userEmail = user.email;
-      this.role = user.id;
 
       await this.cargarProductos();
       await this.cargarCarrito();

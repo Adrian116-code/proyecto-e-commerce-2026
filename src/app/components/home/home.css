@@ -162,6 +162,8 @@
   display: flex;
   gap: 20px;
   padding: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 .content-area {
@@ -222,4 +224,14 @@ nav {
   top: 0;
   z-index: 1000;    
   display: flex;
+}
+
+@media (max-width: 768px) {
+
+
+}
+
+@media (max-width: 1024px) {
+
+
 }
