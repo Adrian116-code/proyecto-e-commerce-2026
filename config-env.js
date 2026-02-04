@@ -15,8 +15,8 @@ if (!fs.existsSync(dir)) {
 const envConfigFile = `
 export const environment = {
   production: true,
-  supabaseUrl: '${process.env.SUPABASE_URL || ""}',
-  supabaseKey: '${process.env.SUPABASE_KEY || ""}'
+  supabaseUrl: '${process.env.supabaseUrl || ""}',
+  supabaseKey: '${process.env.supabaseKey || ""}'
 };
 `;
 
