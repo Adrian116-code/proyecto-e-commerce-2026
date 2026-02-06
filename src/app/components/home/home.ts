@@ -26,13 +26,15 @@ export class Home {
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
 
+    await this.cargarProductos();
+    await this.cargarCarrito();
+
     if (!user) {
-      this.router.navigate(['/login']);
+      Swal.fire({
+        text: "Bienvenido a la Aplicación",
+      });
     } else {
       this.userEmail = user.email;
-
-      await this.cargarProductos();
-      await this.cargarCarrito();
     }
   }
 
@@ -90,7 +92,21 @@ export class Home {
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
     if (!user) {
-      alert('Debes iniciar sesión para comprar');
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Debes iniciar sesión para comprar",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Iniciar Sesión'
+      });
+
+      if (result.isConfirmed) {
+        this.router.navigate(['/login']);
+
+      }
+
       return;
     }
 
