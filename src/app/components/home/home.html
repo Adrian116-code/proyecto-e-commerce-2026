@@ -1,26 +1,24 @@
-<div class="welcome-container">
-  <h1>Bienvenido a la Aplicación</h1>
-  <p>Por favor, inicia sesión o crea una cuenta para continuar.</p>
-
-
-  <nav>
-    <div class="actions">
-      <button routerLink="/admin">Admin</button>
-      <button routerLink="/login">Ir al Login</button>
-      <button routerLink="/register">Crear Cuenta</button>
-      <button routerLink="/carrito-de-compras">Carrito de Compras</button>
-    </div>
-  </nav>
-
+<div class="welcome-container" style="min-height: 100vh;">
+      <div class="content">
+    <h1>Bienvenido a la Aplicación</h1>
+    <p>Por favor, inicia sesión o crea una cuenta para continuar.</p>
+  </div>
+   <nav class="main-nav">
+      <div  class="actions">
+        <button routerLink="/admin">Admin</button>
+        <button routerLink="/login">Ir al Login</button>
+        <button routerLink="/register">Crear Cuenta</button>
+        <button routerLink="/carrito-de-compras">Carrito de Compras</button>
+      </div>
+    </nav>
   <div class="home-container">
-
     <p>Bienvenido: <strong>{{ userEmail }}</strong></p>
     <button class="btn btn-primary" (click)="signOut()">Cerrar Sesión</button>
   </div> <br>
-  <h1 style="text-align: center;">Productos</h1>
 </div>
 <div class="main-layout">
   <div class="content-area">
+          <div style="color: white">  <h1 style="text-align: center;">Productos</h1></div>
     <div class="productos-grid">
       <div *ngFor="let p of productos" class="producto-card">
 
@@ -57,7 +55,7 @@
       </div>
       <div class="cart-total" *ngIf="carritoItems.length > 0">
         <hr>
-        <button class="btn-checkout" routerLink="/metodo-de-pago">Finalizar Compra</button>
+        <button class="btn-checkout" routerLink="/carrito-de-compras">Finalizar Compra</button>
       </div>
     </aside>
   </div>

@@ -10,11 +10,10 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.css',
 })
 export class Login {
-email = '';
+  email = '';
   password = '';
 
-
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private auth: Auth, private router: Router) { }
 
   async signIn() {
     const { data, error } = await this.auth.signIn(this.email, this.password);
@@ -25,8 +24,8 @@ email = '';
       console.log('Usuario logueado con éxito:', data);
       this.router.navigate(['/home']);
     }
-    
+
   }
-  
-  
+
+
 }

@@ -2,17 +2,19 @@ import { Component } from '@angular/core';
 import { SupabaseService } from '../../services/supabase';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ɵInternalFormsSharedModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, ɵInternalFormsSharedModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
   userEmail: string | undefined = '';
+  username: string | undefined = '';
+  userapellido: string | undefined = '';
   productos: any[] = [];
   carritoItems: any[] = [];
 

@@ -3,10 +3,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 80vh;
   text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding-top: 50px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    margin: 0;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+        url("https://i.ytimg.com/vi/sWXRJbGi6yQ/maxresdefault.jpg");
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+  flex-wrap: wrap;
 }
 
 .actions button {
@@ -123,12 +130,12 @@
 
 .main-nav {
   display: flex;
-  justify-content: space-between;
+  justify-content:center;
   align-items: center;
-  background: #f8f9fa;
   padding: 10px 20px;
   border-radius: 8px;
-  margin-bottom: 20px;
+
+  width: 100%;
 }
 
 .productos-grid {
@@ -183,6 +190,9 @@
   top: 20px;
   box-shadow: -2px 0 5px rgba(0,0,0,0.05);
   color:black;
+  max-width: 90%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .cart-item {
@@ -227,7 +237,6 @@ nav {
 }
 
 @media (max-width: 768px) {
-
 
 }
 
