@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, numberAttribute } from '@angular/core';
 import { SupabaseService } from '../../services/supabase';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -17,6 +17,7 @@ export class Home {
   userapellido: string | undefined = '';
   productos: any[] = [];
   carritoItems: any[] = [];
+  total: any;
 
   constructor(
     private fb: FormBuilder,
@@ -27,9 +28,9 @@ export class Home {
   async ngOnInit() {
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
-
     await this.cargarProductos();
     await this.cargarCarrito();
+    await this.actualizarTotal();
 
     if (!user) {
       Swal.fire({
@@ -41,6 +42,7 @@ export class Home {
   }
 
   async cargarCarrito() {
+
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
     if (!user) {
@@ -66,6 +68,7 @@ export class Home {
   }
 
   async cargarProductos() {
+
     const { data, error } = await this.supabase.supabase
       .from('productos')
       .select(`
@@ -80,6 +83,12 @@ export class Home {
 
     if (error) console.error(error);
     else this.productos = data;
+  }
+
+  actualizarTotal() {
+    this.total = this.carritoItems.reduce((acc, item) => {
+      return acc + (item.productos.precio * item.cantidad);
+    }, 0);
   }
 
   async signOut() {
@@ -106,9 +115,7 @@ export class Home {
 
       if (result.isConfirmed) {
         this.router.navigate(['/login']);
-
       }
-
       return;
     }
 
@@ -120,10 +127,10 @@ export class Home {
           producto_id: producto.id,
           imagen_id: producto.imagen_url,
           cantidad: 1
-        }
-
+        },
       ]);
     await this.cargarCarrito();
+    await this.actualizarTotal();
 
     if (error) {
       console.error('Error al agregar:', error);
@@ -174,7 +181,8 @@ export class Home {
         alert('No se pudo eliminar el producto');
       } else {
         await this.cargarCarrito();
+        this.actualizarTotal();
       }
     }
   }
-}
+} 

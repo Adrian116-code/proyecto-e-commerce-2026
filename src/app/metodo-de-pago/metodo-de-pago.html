@@ -1,4 +1,29 @@
 <div style="text-align:center">
-<h3>Método de pago</h3>
-<button class="btn btn-success" routerLink="/detalles-del-pedido">Pagar</button>
+    <nav class="main-nav">
+        <div class="actions">
+            <button routerLink="/admin">Admin</button>
+            <button routerLink="/login">Ir al Login</button>
+            <button routerLink="/home">Home</button>
+            <button routerLink="/register">Crear Cuenta</button>
+            <button routerLink="/carrito-de-compras">Carrito de Compras</button>
+        </div>
+    </nav>
+    <h3>Método de pago</h3>
+    <aside class="cart-sidebar" style="width: 50%;">
+        <h3>🛒 Mi Carrito</h3>
+        <div *ngIf="carritoItems.length === 0" class="empty-cart">
+            El carrito está vacío
+        </div>
+        <div class="cart-item" *ngFor="let item of carritoItems">
+            <img style="width: 5%;" [src]="item.imagen_id || 'assets/default.png'">
+            <div class="item-info">
+                <span class="item-name">{{ item.productos?.nombre }}</span>
+                <span class="item-qty">Cant: {{ item.cantidad }}</span>
+            </div>
+            <span class="item-price">${{ item.productos?.precio * item.cantidad }}</span>
+        </div>
+    </aside> <br>
+    <span class="item-name">Estado: {{ estado }}</span>
+    <h3>Total a pagar ${{total}}</h3> <br>
+    <button class="btn btn-success" routerLink="/detalles-del-pedido">Pagar</button>
 </div>

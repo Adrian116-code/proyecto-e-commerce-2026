@@ -15,6 +15,9 @@ export class CarritoDeCompras {
   userEmail: string | undefined = '';
   productos: any[] = [];
   carritoItems: any[] = [];
+  pedidoItems: any[] = [];
+  carrito: any[] = [];
+  total: any;
 
   constructor(private supabase: SupabaseService, private router: Router) { }
 
@@ -29,10 +32,13 @@ export class CarritoDeCompras {
 
       await this.cargarProductos();
       await this.cargarCarrito();
+      await this.cargarPedidos();
+      await this.actualizarTotal();
     }
   }
 
   async cargarCarrito() {
+
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
     if (!user) {
@@ -73,6 +79,36 @@ export class CarritoDeCompras {
     else this.productos = data;
   }
 
+  async cargarPedidos() {
+    const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+    if (!user) {
+      this.pedidoItems = [];
+      return;
+    }
+
+    const { data, error } = await this.supabase.supabase
+      .from('pedidos')
+      .select(`
+      id,
+      total,
+      estado
+    `)
+      .eq('user_id', user.id);
+
+    if (error) {
+      console.error('Error al cargar carrito:', error);
+    } else {
+      this.pedidoItems = data || [];
+    }
+  }
+
+    actualizarTotal() {
+    this.total = this.carritoItems.reduce((acc, item) => {
+      return acc + (item.productos.precio * item.cantidad);
+    }, 0);
+  }
+
   async signOut() {
     const { error } = await this.supabase.supabase.auth.signOut();
     if (!error) {
@@ -88,6 +124,11 @@ export class CarritoDeCompras {
       alert('Debes iniciar sesión para comprar');
       return;
     }
+
+      const totalPedido = this.carritoItems.reduce((acc, item) => {
+      return acc + (item.productos.precio * item.cantidad)
+      }, 0);
+      this.total = totalPedido;
 
     const { error } = await this.supabase.supabase
       .from('carrito')
@@ -115,6 +156,38 @@ export class CarritoDeCompras {
 
   verDetalle(producto: any) {
     alert(`Descripción: ${producto.descripcion || 'Sin descripción'}`);
+  }
+
+  async agregarAlPedido(carrito: any) {
+
+    const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+    if (!user) {
+      alert('Debes iniciar sesión para comprar');
+      return;
+    }
+
+    const { error } = await this.supabase.supabase
+      .from('pedidos')
+      .insert([
+        {
+          user_id: user.id,
+          total: this.total,
+          estado: "En preparación"
+        }
+      ]);
+    await this.cargarPedidos();
+
+    if (error) {
+      console.error('Error al agregar:', error);
+      alert('No se pudo agregar al carrito');
+    } else {
+      Swal.fire({
+        title: `${carrito} añadido al carrito`,
+        icon: "success",
+        draggable: true
+      });
+    }
   }
 
   async eliminarDelCarrito(itemId: string) {

@@ -17,6 +17,7 @@ export class ListaObjetos {
   userEmail: string | undefined = '';
   productos: any[] = [];
   carritoItems: any[] = [];
+  total: any;
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +36,7 @@ export class ListaObjetos {
 
       await this.cargarProductos();
       await this.cargarCarrito();
+      await this.actualizarTotal();
     }
   }
 
@@ -80,6 +82,12 @@ export class ListaObjetos {
     else this.productos = data;
   }
 
+  actualizarTotal() {
+    this.total = this.carritoItems.reduce((acc, item) => {
+      return acc + (item.productos.precio * item.cantidad);
+    }, 0);
+  }
+
   async signOut() {
     const { error } = await this.supabase.supabase.auth.signOut();
     if (!error) {
@@ -108,6 +116,7 @@ export class ListaObjetos {
 
       ]);
     await this.cargarCarrito();
+    await this.actualizarTotal();
 
     if (error) {
       console.error('Error al agregar:', error);
@@ -163,6 +172,7 @@ export class ListaObjetos {
         alert('No se pudo eliminar el producto');
       } else {
         await this.cargarCarrito();
+        await this.actualizarTotal();
       }
     }
   }
