@@ -16,6 +16,7 @@ export class CarritoDeCompras {
   productos: any[] = [];
   carritoItems: any[] = [];
   pedidoItems: any[] = [];
+  detalleItems: any[] = [];
   carrito: any[] = [];
   total: any;
 
@@ -92,7 +93,8 @@ export class CarritoDeCompras {
       .select(`
       id,
       total,
-      estado
+      estado,
+      productos (nombre, precio)
     `)
       .eq('user_id', user.id);
 
@@ -100,6 +102,31 @@ export class CarritoDeCompras {
       console.error('Error al cargar carrito:', error);
     } else {
       this.pedidoItems = data || [];
+    }
+  }
+
+    async cargarDetallesPedidos() {
+    const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+    if (!user) {
+      this.detalleItems = [];
+      return;
+    }
+
+    const { data, error } = await this.supabase.supabase
+      .from('detalles_pedido')
+      .select(`
+      id,
+      cantidad,
+      precio_unitario,
+      productos (nombre, precio),
+    `)
+      .eq('user_id', user.id);
+
+    if (error) {
+      console.error('Error al cargar detalles:', error);
+    } else {
+      this.detalleItems = data || [];
     }
   }
 
@@ -116,49 +143,11 @@ export class CarritoDeCompras {
     }
   }
 
-  async agregarAlCarrito(producto: any) {
-
-    const { data: { user } } = await this.supabase.supabase.auth.getUser();
-
-    if (!user) {
-      alert('Debes iniciar sesión para comprar');
-      return;
-    }
-
-      const totalPedido = this.carritoItems.reduce((acc, item) => {
-      return acc + (item.productos.precio * item.cantidad)
-      }, 0);
-      this.total = totalPedido;
-
-    const { error } = await this.supabase.supabase
-      .from('carrito')
-      .insert([
-        {
-          user_id: user.id,
-          producto_id: producto.id,
-          imagen_id: producto.imagen_url,
-          cantidad: 1
-        }
-      ]);
-    await this.cargarCarrito();
-
-    if (error) {
-      console.error('Error al agregar:', error);
-      alert('No se pudo agregar al carrito');
-    } else {
-      Swal.fire({
-        title: `${producto.nombre} añadido al carrito`,
-        icon: "success",
-        draggable: true
-      });
-    }
-  }
-
   verDetalle(producto: any) {
     alert(`Descripción: ${producto.descripcion || 'Sin descripción'}`);
   }
 
-  async agregarAlPedido(carrito: any) {
+  async agregarAlPedido(producto: any) {
 
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
@@ -172,7 +161,7 @@ export class CarritoDeCompras {
       .insert([
         {
           user_id: user.id,
-          total: this.total,
+          total: this.actualizarTotal(),
           estado: "En preparación"
         }
       ]);
@@ -183,12 +172,58 @@ export class CarritoDeCompras {
       alert('No se pudo agregar al carrito');
     } else {
       Swal.fire({
-        title: `${carrito} añadido al carrito`,
+        title: `Pedido registrado`,
         icon: "success",
         draggable: true
       });
     }
   }
+
+      async agregarDetallesPedido(producto: any, pedidoItems: any) {
+  
+      const { data: { user } } = await this.supabase.supabase.auth.getUser();
+  
+      if (!user) {
+        const result = await Swal.fire({
+          title: '¿Estás seguro?',
+          text: "Debes iniciar sesión para comprar",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Iniciar Sesión'
+        });
+  
+        if (result.isConfirmed) {
+          this.router.navigate(['/login']);
+        }
+        return;
+      }
+  
+      const { error } = await this.supabase.supabase
+        .from('detalles_pedido')
+        .insert([
+          {
+            producto_id: producto.id,
+            pedido_id: pedidoItems.id,
+            canidad: producto.cantidad,
+            precio_unitario: this.actualizarTotal()
+          }
+  
+        ]);
+      await this.cargarDetallesPedidos();
+  
+      if (error) {
+        console.error('Error al agregar:', error);
+        alert('No se pudo agregar al carrito');
+      } else {
+        Swal.fire({
+          title: `${producto.nombre} añadido al carrito`,
+          icon: "success",
+          draggable: true
+        });
+      }
+    }
 
   async eliminarDelCarrito(itemId: string) {
 

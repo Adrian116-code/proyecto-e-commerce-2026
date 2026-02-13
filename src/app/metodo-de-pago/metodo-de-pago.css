@@ -174,13 +174,13 @@
 }
 
 .content-area {
-  flex: 3;
+
   color:black;
   text-align: center;
 }
 
 .cart-sidebar {
-  flex: 1;
+
   background: #fdfdfd;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -234,6 +234,30 @@ nav {
   top: 0;
   z-index: 1000;    
   display: flex;
+}
+
+.auth-card {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {

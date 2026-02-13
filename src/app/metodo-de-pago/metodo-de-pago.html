@@ -8,22 +8,44 @@
             <button routerLink="/carrito-de-compras">Carrito de Compras</button>
         </div>
     </nav>
-    <h3>Método de pago</h3>
-    <aside class="cart-sidebar" style="width: 50%;">
-        <h3>🛒 Mi Carrito</h3>
-        <div *ngIf="carritoItems.length === 0" class="empty-cart">
-            El carrito está vacío
-        </div>
-        <div class="cart-item" *ngFor="let item of carritoItems">
-            <img style="width: 5%;" [src]="item.imagen_id || 'assets/default.png'">
-            <div class="item-info">
-                <span class="item-name">{{ item.productos?.nombre }}</span>
-                <span class="item-qty">Cant: {{ item.cantidad }}</span>
+    <h1>Método de pago</h1>
+    <div class="main-layout">
+        <div class="content-area" style="width: 50%;">
+            <div class="auth-card">
+                <div style="color: white">
+                    <h3 style="text-align: center;">Datos Personales</h3>
+                </div>
+                <div class="form-group" style="color: white">
+                    <label for="Nombre">Nombres: </label>
+                    <input type="text" [(ngModel)]="nombres">
+                </div>
+                <div class="form-group" style="color: white">
+                    <label for="Apellidos">Apellidos: </label>
+                    <input type="text" [(ngModel)]="apellidos">
+                </div>
+                <div class="form-group" style="color: white">
+                    <label for="Teléfono">Teléfono: </label>
+                    <input type="number" [(ngModel)]="telefono">
+                </div>
+                <button class="btn btn-secondary" (click)="agregarProfile()">Agregar Datos</button>
             </div>
-            <span class="item-price">${{ item.productos?.precio * item.cantidad }}</span>
         </div>
-    </aside> <br>
+        <aside class="cart-sidebar" style="width: 50%;">
+            <h3>🛒 Mi Carrito</h3>
+            <div *ngIf="carritoItems.length === 0" class="empty-cart">
+                El carrito está vacío
+            </div>
+            <div class="cart-item" *ngFor="let item of carritoItems">
+                <img style="width: 5%;" [src]="item.imagen_id || 'assets/default.png'">
+                <div class="item-info">
+                    <span class="item-name">{{ item.productos?.nombre }}</span>
+                    <span class="item-qty">Cant: {{ item.cantidad }}</span>
+                </div>
+                <span class="item-price">${{ item.productos?.precio * item.cantidad }}</span>
+            </div>
+        </aside>
+    </div> <br>
     <span class="item-name">Estado: {{ estado }}</span>
     <h3>Total a pagar ${{total}}</h3> <br>
-    <button class="btn btn-success" routerLink="/detalles-del-pedido">Pagar</button>
+    <button class="btn btn-success" routerLink="/detalles-del-pedido" (click)="agregarAlPedido()">Pagar</button>
 </div>

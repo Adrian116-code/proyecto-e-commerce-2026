@@ -19,9 +19,14 @@ export class MetodoDePago {
   carritoItems: any[] = [];
   categorias: any[] = [];
   pedidoItems: any[] = [];
+  detalleItems: any[] = [];
   carrito: any[] = [];
   total: any;
   estado: any;
+  nombres: any;
+  apellidos: any;
+  telefono: number | any;
+  profileItems: any[] = [];
 
   constructor(private supabase: SupabaseService, private router: Router) {
 
@@ -40,6 +45,7 @@ export class MetodoDePago {
       await this.cargarCarrito();
       await this.cargarPedidos();
       await this.actualizarTotal();
+      await this.cargarDetallesPedidos();
     }
   }
 
@@ -84,7 +90,7 @@ export class MetodoDePago {
     else this.productos = data;
   }
 
-    async cargarPedidos() {
+  async cargarPedidos() {
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
     if (!user) {
@@ -102,13 +108,36 @@ export class MetodoDePago {
       .eq('user_id', user.id);
 
     if (error) {
-      console.error('Error al cargar carrito:', error);
+      console.error('Error al cargar pedidos:', error);
     } else {
       this.pedidoItems = data || [];
     }
   }
 
-     actualizarTotal() {
+  async cargarDetallesPedidos() {
+    const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+    if (!user) {
+      this.detalleItems = [];
+      return;
+    }
+
+    const { data, error } = await this.supabase.supabase
+      .from('detalles_pedido')
+      .select(`
+      id,
+      cantidad,
+      precio_unitario
+    `);
+
+    if (error) {
+      console.error('Error al cargar detalles:', error);
+    } else {
+      this.detalleItems = data || [];
+    }
+  }
+
+  actualizarTotal() {
     this.total = this.carritoItems.reduce((acc, item) => {
       return acc + (item.productos.precio * item.cantidad);
     }, 0);
@@ -160,40 +189,143 @@ export class MetodoDePago {
     }
   }
 
-  async agregarAlPedido(carrito: any) {
+  async agregarAlPedido() {
+    const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+    if (!user) return;
+
+    const { data: nuevoPedido, error } = await this.supabase.supabase
+      .from('pedidos')
+      .insert([{
+        user_id: user.id,
+        total: this.total,
+        estado: "En preparación"
+      }])
+      .select()
+      .single();
+
+    if (error || !nuevoPedido) {
+      console.error('Error de Supabase (RLS):', error);
+      return;
+    }
+
+    if (nuevoPedido) {
+
+      const itemsParaInsertar = this.carritoItems.map(item => ({
+        pedido_id: nuevoPedido.id,
+        producto_id: item.productos_id,
+        cantidad: item.cantidad,
+        precio_unitario: item.productos.precio
+      }));
+
+      const { error: errorDetalles } = await this.supabase.supabase
+        .from('detalles_pedido')
+        .insert(itemsParaInsertar);
+
+      if (errorDetalles) {
+        console.error('Error en detalles:', errorDetalles.message);
+      }
+    }
+    this.agregarDetallesPedido(nuevoPedido.id);
+  }
+
+  async agregarDetallesPedido(producto: any) {
 
     const { data: { user } } = await this.supabase.supabase.auth.getUser();
 
     if (!user) {
-      alert('Debes iniciar sesión para comprar');
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Debes iniciar sesión para comprar",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Iniciar Sesión'
+      });
+
+      if (result.isConfirmed) {
+        this.router.navigate(['/login']);
+      }
       return;
     }
 
-      const totalPedido = this.carritoItems.reduce((acc, item) => {
-        return acc + (item.productos.precio * item.cantidad);
-      }, 0);
-
     const { error } = await this.supabase.supabase
-      .from('pedidos')
+      .from('detalles_pedido')
       .insert([
         {
-          user_id: user.id,
-          total: totalPedido,
-          estado: "En preparación"
-        },
+          producto_id: producto.id,
+          cantidad: 1,
+          precio_unitario: this.total,
+        }
       ]);
-    await this.cargarPedidos();
+    await this.cargarDetallesPedidos();
 
     if (error) {
       console.error('Error al agregar:', error);
       alert('No se pudo agregar al carrito');
     } else {
       Swal.fire({
-        title: `${carrito} añadido al carrito`,
+        title: `${producto.nombre} añadido al carrito`,
         icon: "success",
         draggable: true
       });
     }
+  }
+
+  async cargarProfile(){
+
+    const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+    if (!user) {
+      this.profileItems = [];
+      return;
+    }
+
+    const { data, error } = await this.supabase.supabase
+      .from('profiles')
+      .select(`
+      id,
+      nombre,
+      apellido
+    `);
+
+    if (error) {
+      console.error('Error al cargar pedidos:', error);
+    } else {
+      this.profileItems = data || [];
+    }
+  }
+
+  async agregarProfile(){
+
+        const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+    if (!user) {
+      this.profileItems = [];
+      return;
+    }
+    const { error } = await this.supabase.supabase
+      .from('profiles')
+      .update([
+        {
+          nombre: this.nombres,
+          apellido: this.apellidos
+        }
+      ])
+      .eq('id', user.id);;
+          if (error) {
+      console.error('Error al agregar:', error);
+      alert('No se pudo agregar');
+    } else {
+      Swal.fire({
+        title: `${this.profileItems} añadido`,
+        icon: "success",
+        draggable: true
+      });
+    }
+    await this.cargarProfile();
+    
   }
 
 }
