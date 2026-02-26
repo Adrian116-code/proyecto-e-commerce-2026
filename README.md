@@ -1,5 +1,38 @@
 # ProyectoEcommerce
 
+# 🛒 E-Commerce App - Angular & Supabase
+
+Este es un proyecto de comercio electrónico funcional que integra un frontend robusto con servicios de backend modernos. La aplicación permite la gestión de productos, autenticación de usuarios y persistencia de datos en tiempo real.
+
+> **🔗 Enlace en vivo:** (https://proyecto-e-commerce-2026.pages.dev/home)
+
+---
+
+## 🛠️ Stack Tecnológico
+
+* **Frontend:** Angular - Estructura modular y componentes reutilizables.
+* **Lenguaje:** **TypeScript** - Implementación de interfaces para modelos de datos (Productos, Usuarios, Carrito).
+* **Backend as a Service (BaaS):** **Supabase** - Gestión de Base de Datos PostgreSQL y Autenticación.
+* **CSS:** - Diseño moderno y responsivo.
+
+---
+
+## 🌟 Características Principales
+
+* **Autenticación segura:** Registro e inicio de sesión gestionado a través de Supabase Auth.
+* **Gestión de Catálogo:** Consumo de datos desde PostgreSQL en tiempo real.
+* **Carrito de Compras:** Lógica desarrollada íntegramente en TypeScript para agregar, eliminar y calcular totales.
+
+---
+
+## ⚙️ Configuración del Proyecto
+
+Para correr este proyecto localmente, necesitarás configurar tus propias variables de entorno de Supabase.
+
+1. **Clona el repositorio:**
+   ```bash
+   git clone https://github.com/Adrian116-code/proyecto-e-commerce-2026.git
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.2.
 
 ## Development server
